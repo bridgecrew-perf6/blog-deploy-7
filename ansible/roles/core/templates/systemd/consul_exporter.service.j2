@@ -1,0 +1,16 @@
+[Unit]
+Description=consul_exporter Agent
+
+[Service]
+User=prometheus
+Group={{ service_users_group }}
+Type=simple
+ExecStartPre={{ base_dir }}/prerun-logrotate.sh consul_exporter
+ExecStart={{ prometheus_dir }}/consul_exporter/consul_exporter
+StandardOutput=file:{{ log_dir }}/consul_exporter.log
+StandardError=inherit
+Restart=on-failure
+RestartSec=10s
+
+[Install]
+WantedBy=multi-user.target

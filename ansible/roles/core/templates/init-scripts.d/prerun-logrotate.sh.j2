@@ -1,0 +1,45 @@
+#! /usr/bin/env bash
+
+set -Eeuo pipefail
+
+function usage() {
+    echo "usage: $0 <service>"
+}
+
+function help() {
+    usage
+    echo
+    echo "$0 is a pre-run script for systemd services which ensures existence "
+    echo "of log directories for a given <service> and rotating old logs when "
+    echo "the service restarts"
+    echo
+    echo "Options and arguments:"
+    echo "-h\t: print this help message and exit (also --help)"
+    echo
+}
+
+if [[ $# -lt 1 ]]; then
+    usage
+    exit 1
+fi
+
+service=
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        -h|--help)
+            help
+            exit 2
+            shift
+            ;;
+        *)
+            service=$1
+            shift
+            ;;
+    esac
+done
+
+logfile="/var/log/${service}/${service}.log"
+if [[ -f "${logfile}" ]]; then
+    # rotate old log file
+    mv "${logfile}" "/var/log/${service}/${service}-$(date +'%Y%m%d_%H%M%S.%N').log"
+fi

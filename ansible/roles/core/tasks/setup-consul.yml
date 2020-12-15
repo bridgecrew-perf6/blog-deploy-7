@@ -1,0 +1,11 @@
+---
+- name: copy consul service file
+  template:
+    src: systemd/consul-agent.service.j2
+    dest: /etc/systemd/system/consul-agent.service
+
+- name: enable consul service
+  service:
+    name: consul-agent
+    enabled: yes
+    state: started

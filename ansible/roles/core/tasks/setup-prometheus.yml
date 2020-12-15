@@ -1,0 +1,38 @@
+---
+- name: copy prometheus config
+  template:
+    src: prometheus/prometheus.yml.j2
+    dest: "{{ prometheus_dir }}/prometheus.yml"
+
+- name: copy prometheus service file
+  template:
+    src: systemd/prometheus-agent.service.j2
+    dest: /etc/systemd/system/prometheus-agent.service
+
+- name: copy prometheus node_exporter service file
+  template:
+    src: systemd/node_exporter.service.j2
+    dest: /etc/systemd/system/node_exporter.service
+
+- name: copy prometheus consul_exporter service file
+  template:
+    src: systemd/consul_exporter.service.j2
+    dest: /etc/systemd/system/consul_exporter.service
+
+- name: enable prometheus service
+  service:
+    name: prometheus-agent
+    enabled: yes
+    state: started
+
+- name: enable prometheus node_exporter service
+  service:
+    name: node_exporter
+    enabled: yes
+    state: started
+
+- name: enable prometheus consul_exporter service
+  service:
+    name: consul_exporter
+    enabled: yes
+    state: started

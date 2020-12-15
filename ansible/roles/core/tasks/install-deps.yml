@@ -1,0 +1,61 @@
+---
+- name: add HashiCorp GPG key
+  apt_key:
+    url: "https://apt.releases.hashicorp.com/gpg"
+    state: present
+
+- name: add HashiCorp apt repository
+  apt_repository:
+      repo: "deb [arch=amd64] https://apt.releases.hashicorp.com {{ ansible_distribution_release }} main"
+      state: present
+
+- name: update repo cache
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: create tmp install dir
+  tempfile:
+    prefix: ansible-ghost
+    state: directory
+  register: tmp_install_dir
+
+- name: install consul
+  apt:
+    name: consul
+    state: present
+
+- name: download prometheus
+  unarchive:
+    src: "https://github.com/prometheus/prometheus/releases/download/v{{ prometheus_version }}/prometheus-{{ prometheus_version }}.linux-amd64.tar.gz"
+    dest: "{{ tmp_install_dir.path }}"
+    remote_src: yes
+
+- name: install prometheus
+  command: "cp -r {{ tmp_install_dir.path }}/prometheus-{{ prometheus_version }}.linux-amd64/. {{ prometheus_dir }}/"
+
+- name: download prometheus consul_exporter
+  unarchive:
+    src: "https://github.com/prometheus/consul_exporter/releases/download/v{{ consul_exporter_version }}/consul_exporter-{{ consul_exporter_version }}.linux-amd64.tar.gz"
+    dest: "{{ tmp_install_dir.path }}"
+    remote_src: yes
+
+- name: install prometheus consul_exporter
+  command: "cp -r {{ tmp_install_dir.path }}/consul_exporter-{{ consul_exporter_version }}.linux-amd64/. {{ prometheus_dir }}/consul_exporter/"
+
+- name: download prometheus node_exporter
+  unarchive:
+    src: "https://github.com/prometheus/node_exporter/releases/download/v{{ node_exporter_version }}/node_exporter-{{ node_exporter_version }}.linux-amd64.tar.gz"
+    dest: "{{ tmp_install_dir.path }}"
+    remote_src: yes
+
+- name: install prometheus node_exporter
+  command: "cp -r {{ tmp_install_dir.path }}/node_exporter-{{ node_exporter_version }}.linux-amd64/. {{ prometheus_dir }}/node_exporter/"
+
+- name: set prometheus dir permissions
+  file:
+    path: "{{ prometheus_dir }}"
+    state: directory
+    recurse: yes
+    owner: prometheus
+    group: "{{ service_users_group }}"

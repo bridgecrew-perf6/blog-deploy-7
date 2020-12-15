@@ -1,0 +1,15 @@
+---
+- name: load environment variables
+  set_fact:
+    aws_region: "{{ lookup('env', 'GHOST_AWS_REGION') }}"
+    base_dir: "{{ lookup('env', 'GHOST_BASE_DIR') }}"
+    build_version: "{{ lookup('env', 'GHOST_BUILD_VERSION') }}"
+    commit_hash: "{{ lookup('env', 'GHOST_COMMIT_HASH') }}"
+    environment_: "{{ lookup('env', 'GHOST_ENVIRONMENT') }}"
+
+- include: create-users.yml
+- include: create-dirs.yml
+- include: install-deps.yml
+- include: install-env.yml
+- include: setup-consul.yml
+- include: setup-prometheus.yml

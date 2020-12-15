@@ -1,0 +1,19 @@
+---
+- name: create environment file
+  template:
+    src: profile.d/init-env.sh.j2
+    dest: /etc/profile.d/init-env.sh
+    owner: root
+    group: root
+    mode: 0755
+
+- name: copy ghost init scripts
+  template:
+    src: "init-scripts.d/{{ item }}.sh.j2"
+    dest: "{{ base_dir }}/{{ item }}.sh"
+    group: "{{ service_users_group }}"
+    mode: 0775
+  loop:
+  - prerun-logrotate
+  - consul-service
+  - prometheus-agent-service

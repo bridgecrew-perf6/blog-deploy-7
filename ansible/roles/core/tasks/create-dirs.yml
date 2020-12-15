@@ -1,0 +1,42 @@
+---
+- name: create ghost base dir
+  file:
+    path: "{{ base_dir }}"
+    state: directory
+    group: "{{ service_users_group }}"
+    mode: 0775
+
+- name: create ghost log dir
+  file:
+    path: "{{ log_dir }}"
+    state: directory
+    group: "{{ service_users_group }}"
+    mode: 0775
+
+- name: create ghost run dir
+  file:
+    path: "{{ run_dir }}"
+    state: directory
+    group: "{{ service_users_group }}"
+    mode: 0775
+
+- name: create prometheus dir
+  file:
+    path: "{{ prometheus_dir }}"
+    state: directory
+    group: "{{ service_users_group }}"
+    mode: 0775
+
+- name: create node_exporter dir
+  file:
+    path: "{{ prometheus_dir }}/node_exporter"
+    state: directory
+    group: "{{ service_users_group }}"
+    mode: 0775
+
+- name: create consul_exporter dir
+  file:
+    path: "{{ prometheus_dir }}/consul_exporter"
+    state: directory
+    group: "{{ service_users_group }}"
+    mode: 0775

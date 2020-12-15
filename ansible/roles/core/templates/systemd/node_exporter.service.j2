@@ -1,0 +1,16 @@
+[Unit]
+Description=node_exporter Agent
+
+[Service]
+User=prometheus
+Group={{ service_users_group }}
+Type=simple
+ExecStartPre={{ base_dir }}/prerun-logrotate.sh node_exporter
+ExecStart={{ prometheus_dir }}/node_exporter/node_exporter
+StandardOutput=file:{{ log_dir }}/node_exporter.log
+StandardError=inherit
+Restart=on-failure
+RestartSec=10s
+
+[Install]
+WantedBy=multi-user.target

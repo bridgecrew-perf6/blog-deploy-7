@@ -1,0 +1,16 @@
+[Unit]
+Description=Prometheus Agent
+
+[Service]
+User=prometheus
+Group={{ service_users_group }}
+Type=simple
+ExecStartPre={{ base_dir }}/prerun-logrotate.sh prometheus
+ExecStart={{ base_dir }}/prometheus-agent-service.sh
+StandardOutput=file:{{ log_dir }}/prometheus.log
+StandardError=inherit
+Restart=on-failure
+RestartSec=10s
+
+[Install]
+WantedBy=multi-user.target

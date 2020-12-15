@@ -1,0 +1,33 @@
+---
+- name: create service users group
+  group:
+    name: "{{ service_users_group }}"
+    state: present
+    system: yes
+
+- name: create service users
+  user:
+    name: "{{ item['name'] }}"
+    state: present
+    groups:
+      - "{{ service_users_group }}"
+    append: yes
+    create_home: no
+    system: yes
+    shell: /bin/false
+  loop: "{{ service_users }}"
+
+- name: create remote users
+  user:
+    name: "{{ item['name'] }}"
+    state: present
+  loop: "{{ remote_users }}"
+
+- name: configure password-less sudo for privileged remote users
+  template:
+    src: sudoers.d/99-sudoer.j2
+    dest: "/etc/sudoers.d/99-{{ item['name'] }}"
+  vars:
+    - user: "{{ item['name'] }}"
+  loop: "{{ remote_users }}"
+  when: item['sudoer']
