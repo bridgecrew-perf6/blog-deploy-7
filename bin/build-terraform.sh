@@ -9,7 +9,6 @@ commit_hash=${COMMIT_HASH:-}
 environment=${BUILD_ENVIRONMENT:-development}
 packer_image_id=${PACKER_AMI_ID:-}
 
-packer_flags=${PACKER_FLAGS:-}
 terraform_dir=${TERRAFORM_DIR:-}
 terraform_flags=${TERRAFORM_FLAGS:-}
 
@@ -23,10 +22,11 @@ terraform apply \
   -var "build_version=${build_version}" \
   -var "commit_hash=${commit_hash}" \
   -var "environment=${environment}" \
-  -var "availability_zone_names=[\"us-west-2a\"]" \
+  -var 'availability_zone_names=["us-west-2a"]' \
   -var "ec2_image_id=${packer_image_id}" \
   -var "ec2_instance_type=t3.micro" \
   -var "ec2_ssh_key_pair=pangu" \
-  "${terraform_flags}"
+  ${terraform_flags:-}
+  "${terraform_dir}/main.tf"
 
 popd

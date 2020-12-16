@@ -38,7 +38,7 @@
   unarchive:
     src: "https://github.com/prometheus/consul_exporter/releases/download/v{{ consul_exporter_version }}/consul_exporter-{{ consul_exporter_version }}.linux-amd64.tar.gz"
     dest: "{{ tmp_install_dir.path }}"
-    remote_src: true 
+    remote_src: true
 
 - name: install prometheus consul_exporter
   command: "cp -r {{ tmp_install_dir.path }}/consul_exporter-{{ consul_exporter_version }}.linux-amd64/. {{ prometheus_dir }}/consul_exporter/"
