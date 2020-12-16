@@ -14,6 +14,6 @@
     group: "{{ service_users_group }}"
     mode: 0775
   loop:
-  - prerun-logrotate
-  - consul-service
-  - prometheus-agent-service
+    - prerun-logrotate
+    - consul-service
+    - prometheus-agent-service

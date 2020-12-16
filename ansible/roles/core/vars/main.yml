@@ -1,3 +1,4 @@
+---
 log_dir: /var/log/ghost
 run_dir: /var/opt/ghost
 
@@ -10,7 +11,7 @@ service_users:
 remote_users:
   - name: pangu
     ssh_key: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDEhuwvHoBF6ipBxkzRPKXI0JCOMZRma9NUHl2B0BfQyUVeOsucNMG1VtkP+kxUo42x1Kcivj1EgDMaJQo8DuLA+7HQmH5w5Gpbo2jO/wblA+eB81qRLTaT4YhWXPAOW8FB/nDZg6U4B8GFkP3UWhNGCDciY6NDoMqPSULgQicQ3xCjJonnp5fFICu+pzvumdMM5WhahTW51KetctwX/1uYiafIq6mk/5QAbKvBUTnMmLFGhYkFFUvbzcV16jMyydY9TDF/2+GDpERPymaYh2SxWgOzlxYUClHPfhRkxAern9Oyy3Xy6oqr6TC1RJ/zsqhkH4w6RI9Nzz3A/fCVEv4N19m0ie8pEdVZoXEdEkoEyaaoPAQ1ZHeCjxUng5JMtgxyK/xGxNw3rx7ikLrfEVbJQybAjtAs/Yx6o/4MUB3EZYh/s2xidL+YcM/8ltykBeYRgNcRCNtTgAlblwnYHHp/9837ktDL762xIJgr7/bm4N7WU3KRNeAGyuku+Mxzi22En45GftF7iFJNiPKKV81+Z0p2uNxkD7hqB82ywH6x3aXsMVfugak3FzvLHbtsuPRLLWQuNjVZQ2Q3+62rQWgJu4woi8ycHrQC2KHoT8D083mgrKpR9nNOv5uWl+5Lv0ftUj7P1KSQ9BPoaDWyJseZYxXBQKDfJH9pWAtPyXclHw==
-    sudoer: yes
+    sudoer: true
 
 # package versions
 prometheus_version: 2.23.0

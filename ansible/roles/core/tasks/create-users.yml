@@ -3,7 +3,7 @@
   group:
     name: "{{ service_users_group }}"
     state: present
-    system: yes
+    system: true
 
 - name: create service users
   user:
@@ -11,9 +11,9 @@
     state: present
     groups:
       - "{{ service_users_group }}"
-    append: yes
-    create_home: no
-    system: yes
+    append: true
+    create_home: false
+    system: true
     shell: /bin/false
   loop: "{{ service_users }}"
 

@@ -22,17 +22,17 @@
 - name: enable prometheus service
   service:
     name: prometheus-agent
-    enabled: yes
+    enabled: true
     state: started
 
 - name: enable prometheus node_exporter service
   service:
     name: node_exporter
-    enabled: yes
+    enabled: true
     state: started
 
 - name: enable prometheus consul_exporter service
   service:
     name: consul_exporter
-    enabled: yes
+    enabled: true
     state: started

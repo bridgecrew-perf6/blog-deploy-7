@@ -3,17 +3,17 @@
 set -Eeuo pipefail
 set -o xtrace
 
-ansible_dir=${ANSIBLE_DIR}
+ansible_dir=${ANSIBLE_DIR:-}
 aws_region=${AWS_REGION:-us-west-2}
-commit_hash=${COMMIT_HASH}
+commit_hash=${COMMIT_HASH:-}
 environment=${BUILD_ENVIRONMENT:-development}
 
 ansible_dir=${ANSIBLE_DIR:-}
 packer_dir=${PACKER_DIR:-}
 
-pushd ${packer_dir}
+pushd "${packer_dir}"
 
-export PACKER_AMI_ID=$( \
+PACKER_AMI_ID=$( \
     /usr/bin/packer build \
         -var-file "${environment}.pkrvars.hcl" \
         -var "ansible_playbook=${ansible_dir}/main.yml" \
@@ -25,6 +25,6 @@ export PACKER_AMI_ID=$( \
     | tail -n1 \
     | awk '{print $2}')
 
-echo "${PACKER_AMI_ID}"
+export PACKER_AMI_ID=${PACKER_AMI_ID}
 
 popd

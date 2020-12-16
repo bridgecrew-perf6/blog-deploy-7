@@ -7,5 +7,5 @@
 - name: enable consul service
   service:
     name: consul-agent
-    enabled: yes
+    enabled: true
     state: started
