@@ -1,16 +1,16 @@
 pwd := $(shell pwd)
 
-AWS_REGION := ${GHOST_AWS_REGION:-us-west-2}
-BUILD_ENVIRONMENT := ${GHOST_BUILD_ENVIRONMENT:-development}
-BUILD_VERSION := ${GHOST_BUILD_VERSION:-}
-COMMIT_HASH := $(shell git rev-parse HEAD)
+AWS_REGION ?= us-west-2
+BUILD_ENVIRONMENT ?= development
+BUILD_VERSION ?= 0.0.0
+COMMIT_HASH ?= 
 
-ANSIBLE_DIR := ${pwd}/ansible
-PACKER_DIR := ${pwd}/packer
-TERRAFORM_DIR := ${pwd}/terraform
+ANSIBLE_DIR ?= ${pwd}/ansible
+PACKER_DIR ?= ${pwd}/packer
+TERRAFORM_DIR ?= ${pwd}/terraform
 
-PACKER_FLAGS := ${GHOST_PACKER_FLAGS:-}
-TERRAFORM_FLAGS := ${GHOST_TERRAFORM_FLAGS:-}
+PACKER_FLAGS ?= 
+TERRAFORM_FLAGS ?= 
 
 terraform:
 	./bin/build-terraform.sh

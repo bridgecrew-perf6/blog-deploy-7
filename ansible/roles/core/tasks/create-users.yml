@@ -21,6 +21,8 @@
   user:
     name: "{{ item['name'] }}"
     state: present
+    create_home: true
+    shell: /bin/bash
   loop: "{{ remote_users }}"
 
 - name: configure password-less sudo for privileged remote users
@@ -31,3 +33,9 @@
     - user: "{{ item['name'] }}"
   loop: "{{ remote_users }}"
   when: item['sudoer']
+
+- name: authorize user ssh key
+  authorized_key:
+    user: "{{ item['name'] }}"
+    key: "{{ item['ssh_key'] }}"
+  loop: "{{ remote_users }}"

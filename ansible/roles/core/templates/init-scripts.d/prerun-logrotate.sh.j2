@@ -1,6 +1,7 @@
 #! /usr/bin/env bash
 
 set -Eeuo pipefail
+set -o xtrace
 
 function usage() {
     echo "usage: $0 <service>"
@@ -13,8 +14,10 @@ function help() {
     echo "of log directories for a given <service> and rotating old logs when "
     echo "the service restarts"
     echo
-    echo "Options and arguments:"
-    echo "-h\t: print this help message and exit (also --help)"
+    echo "options and arguments:"
+    echo "\t<service>:\t the name of the service, used for naming log files"
+    echo
+    echo "\t-h|--help: print this help message and exit"
     echo
 }
 
