@@ -10,7 +10,7 @@ environment="${BUILD_ENVIRONMENT:-development}"
 packer_image_id="${PACKER_AMI_ID:-}"
 
 terraform_dir="${TERRAFORM_DIR:-}"
-terraform_flags="${TERRAFORM_FLAGS:-}"
+terraform_flags=("${TERRAFORM_FLAGS[@]:-}")
 
 pushd "${terraform_dir}"
 
@@ -26,6 +26,6 @@ terraform apply \
   -var "ec2_image_id=${packer_image_id}" \
   -var "ec2_instance_type=t3.micro" \
   -var "ec2_ssh_key_pair=pangu" \
-  ${terraform_flags:-}
+  "${terraform_flags[@]}"
 
 popd

@@ -14,10 +14,10 @@ function help() {
   printf "deploying them with Terraform"
   printf
   printf "options and arguments:"
-  printf "\t-h|--help:\t print this help message and exit"
-  printf "\t-p|--no-packer: skip building a Packer image"
-  printf "\t-t|--no-terraform: skip deploying with Terraform"
-  printf "\t-n|--noninteractive: auto approve Terraform changes"
+  printf "\\t-h|--help:\t print this help message and exit"
+  printf "\\t-p|--no-packer: skip building a Packer image"
+  printf "\\t-t|--no-terraform: skip deploying with Terraform"
+  printf "\\t-n|--noninteractive: auto approve Terraform changes"
   printf 
 }
 
