@@ -4,21 +4,21 @@ set -Eeuo pipefail
 set -o xtrace
 
 function usage() {
-  echo "usage: $0 [flags] <environment>"
+  printf "usage: %s [flags] <environment>" "$0"
 }
 
 function help() {
   usage
-  echo
-  echo "$0 is a build script for seamlessly creating Packer images and "
-  echo "deploying them with Terraform"
-  echo
-  echo "options and arguments:"
-  echo "\t-h|--help:\t print this help message and exit"
-  echo "\t-p|--no-packer: skip building a Packer image"
-  echo "\t-t|--no-terraform: skip deploying with Terraform"
-  echo "\t-n|--noninteractive: auto approve Terraform changes"
-  echo 
+  printf
+  printf "%s is a build script for seamlessly creating Packer images and " "$0"
+  printf "deploying them with Terraform"
+  printf
+  printf "options and arguments:"
+  printf "\t-h|--help:\t print this help message and exit"
+  printf "\t-p|--no-packer: skip building a Packer image"
+  printf "\t-t|--no-terraform: skip deploying with Terraform"
+  printf "\t-n|--noninteractive: auto approve Terraform changes"
+  printf 
 }
 
 if [[ $# -lt 1 ]]; then

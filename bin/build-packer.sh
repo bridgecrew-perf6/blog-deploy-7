@@ -3,13 +3,13 @@
 set -Eeuo pipefail
 set -o xtrace
 
-aws_region="${AWS_REGION}"
+aws_region="${AWS_REGION:-}"
 commit_hash="${COMMIT_HASH:-}"
 environment="${BUILD_ENVIRONMENT:-development}"
 
 ansible_dir="${ANSIBLE_DIR:-}"
 packer_dir="${PACKER_DIR:-}"
-packer_flags="${PACKER_FLAGS:-}"
+packer_flags=("${PACKER_FLAGS[@]:-}")
 
 pushd "${packer_dir}"
 
@@ -19,7 +19,7 @@ pushd "${packer_dir}"
     -var "aws_region=${aws_region}" \
     -var "commit_hash=${commit_hash}" \
     -var "environment=${environment}" \
-    ${packer_flags} \
+    "${packer_flags[@]}" \
     .
 
 popd
