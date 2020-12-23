@@ -5,3 +5,4 @@ output "subnet_ids" {
 output "vpc_id" {
   value = data.aws_vpc.vpc.id
 }
+ 

@@ -3,7 +3,12 @@
         "*.hcl": "terraform"
     },
     "files.exclude": {
-        "**/.venv": true
-    },
-    "editor.tabSize": 2
+        "**/__pycache__": true,
+        "**/.mypy_cache": true,
+        "**/.terraform": true,
+        "**/.terraform.lock.hcl": true,
+        "**/.venv": true,
+        "**/*.tfstate": true,
+        "**/*.tfstate.backup": true
+    }
 }
