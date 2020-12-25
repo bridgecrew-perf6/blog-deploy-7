@@ -1,0 +1,16 @@
+{
+    "datacenter": "{{ aws_region }}",
+    "log_level": "INFO",
+    "log_json": true,
+    "node_name": "ghost",
+    "data_dir": "{{ consul_data_dir }}",
+    "server": true,
+    "ports": {
+        "dns": {{ consul_dns_port }},
+        "http": {{ consul_http_port }},
+        "server": {{ consul_server_port }}
+    },
+    "telemetry": {
+        "disable_compat_1.9": true
+    }
+}

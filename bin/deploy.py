@@ -9,9 +9,10 @@ from logging import Logger
 from pathlib import Path
 from typing import Dict, List
 
-from bin import build_packer, build_terraform
-from bin.builder import run_build_command, FinishedProcessError
-from bin.common import get_logger, get_loop
+import build_packer
+import build_terraform
+from builder import run_build_command, FinishedProcessError
+from common import get_logger, get_loop
 
 
 _CWD = Path(".").resolve()
@@ -38,6 +39,7 @@ class Args:
     no_packer: bool
     no_terraform: bool
     debug: bool
+    dry_run: bool
 
 
 def _parse_args() -> Args:
@@ -125,6 +127,12 @@ def _parse_args() -> Args:
         action="store_true",
         help="enable debug-level log output",
     )
+    parser.add_argument(
+        "--dry-run",
+        default=False,
+        action="store_true",
+        help="display the terraform plan instead of deploying",
+    )
 
     cwd = Path(".").resolve()
     opts = parser.parse_args()
@@ -145,6 +153,7 @@ def _parse_args() -> Args:
         no_packer=bool(opts.no_packer),
         no_terraform=bool(opts.no_terraform),
         debug=bool(opts.debug),
+        dry_run=bool(opts.dry_run),
     )
 
 
@@ -220,7 +229,6 @@ async def main(loop: AbstractEventLoop, log: Logger, args: Args) -> int:
         log.info("finished Packer build step, using AMI '%s'", image_id)
 
     if not args.no_terraform:
-        log.info("starting Terraform build step")
         terraform_args = build_terraform.Args(
             environment=args.environment,
             subcmd="apply",
@@ -236,6 +244,7 @@ async def main(loop: AbstractEventLoop, log: Logger, args: Args) -> int:
             ec2_ssh_key_pair=args.ec2_ssh_key_pair,
             no_init=args.no_init,
             debug=args.debug,
+            dry_run=args.dry_run,
         )
 
         try:

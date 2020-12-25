@@ -9,8 +9,8 @@ from logging import Logger
 from pathlib import Path
 from typing import List
 
-from bin.builder import FinishedProcess, run_build_command
-from bin.common import get_logger, get_loop
+from builder import FinishedProcess, run_build_command
+from common import get_logger, get_loop
 
 
 @dataclass

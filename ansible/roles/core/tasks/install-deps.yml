@@ -14,43 +14,56 @@
     update_cache: true
     cache_valid_time: 3600
 
+- name: install consul
+  apt:
+    name: consul
+    state: present
+
+- name: checking for prometheus existence
+  stat:
+    name: "{{ prometheus_dir }}/prometheus"
+  register:
+    prometheus_file
+
 - name: create tmp install dir
   tempfile:
     prefix: ansible-ghost
     state: directory
   register: tmp_install_dir
-
-- name: install consul
-  apt:
-    name: consul
-    state: present
+  when: not prometheus_file.stat.exists
 
 - name: download prometheus
   unarchive:
     src: "https://github.com/prometheus/prometheus/releases/download/v{{ prometheus_version }}/prometheus-{{ prometheus_version }}.linux-amd64.tar.gz"
     dest: "{{ tmp_install_dir.path }}"
     remote_src: true
+  when: not prometheus_file.stat.exists
 
 - name: install prometheus
   command: "cp -r {{ tmp_install_dir.path }}/prometheus-{{ prometheus_version }}.linux-amd64/. {{ prometheus_dir }}/"
+  when: not prometheus_file.stat.exists
 
 - name: download prometheus consul_exporter
   unarchive:
     src: "https://github.com/prometheus/consul_exporter/releases/download/v{{ consul_exporter_version }}/consul_exporter-{{ consul_exporter_version }}.linux-amd64.tar.gz"
     dest: "{{ tmp_install_dir.path }}"
     remote_src: true
+  when: not prometheus_file.stat.exists
 
 - name: install prometheus consul_exporter
   command: "cp -r {{ tmp_install_dir.path }}/consul_exporter-{{ consul_exporter_version }}.linux-amd64/. {{ prometheus_dir }}/consul_exporter/"
+  when: not prometheus_file.stat.exists
 
 - name: download prometheus node_exporter
   unarchive:
     src: "https://github.com/prometheus/node_exporter/releases/download/v{{ node_exporter_version }}/node_exporter-{{ node_exporter_version }}.linux-amd64.tar.gz"
     dest: "{{ tmp_install_dir.path }}"
     remote_src: true
+  when: not prometheus_file.stat.exists
 
 - name: install prometheus node_exporter
   command: "cp -r {{ tmp_install_dir.path }}/node_exporter-{{ node_exporter_version }}.linux-amd64/. {{ prometheus_dir }}/node_exporter/"
+  when: not prometheus_file.stat.exists
 
 - name: set prometheus dir permissions
   file:
@@ -59,3 +72,4 @@
     recurse: true
     owner: prometheus
     group: "{{ service_users_group }}"
+  when: not prometheus_file.stat.exists

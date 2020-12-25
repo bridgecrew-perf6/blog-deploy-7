@@ -19,12 +19,17 @@ consul_exporter_version: 0.7.1
 node_exporter_version: 1.0.1
 
 # consul variables
-consul_agent_port: 8500
 consul_nodes_count: 1
-consul_data_dir: "{{ run_dir }}/consul"
+consul_dir: "{{ run_dir }}/consul"
+consul_data_dir: "{{ consul_dir }}/data"
+
+consul_dns_port: 8600
+consul_http_port: 8500
+consul_server_port: 8300
 
 # prometheus variables
-prometheus_dir: /var/opt/prometheus
+prometheus_dir: "{{ run_dir }}/prometheus"
+prometheus_data_dir: "{{ prometheus_dir }}/data"
 
 prometheus_port: 9090
 node_exporter_port: 9100

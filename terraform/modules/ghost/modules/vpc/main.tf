@@ -1,11 +1,11 @@
 locals {
   public_subnet_cidr_blocks = {
-    for index, availability_zone in var.availability_zone_names:
+    for index, availability_zone in var.availability_zone_names :
     availability_zone => cidrsubnet(data.aws_vpc.vpc.cidr_block, 8, index)
   }
 
   public_subnet_ipv6_cidr_blocks = {
-    for index, availability_zone in var.availability_zone_names:
+    for index, availability_zone in var.availability_zone_names :
     availability_zone => cidrsubnet(data.aws_vpc.vpc.ipv6_cidr_block, 8, index)
   }
 }
@@ -13,13 +13,13 @@ locals {
 data "aws_vpc" "vpc" {
   tags = {
     Environment = var.default_tags["Environment"]
-    Region = var.default_tags["Region"]
+    Region      = var.default_tags["Region"]
   }
 }
 
 data "aws_internet_gateway" "gateway" {
   filter {
-    name = "attachment.vpc-id"
+    name   = "attachment.vpc-id"
     values = [data.aws_vpc.vpc.id]
   }
 }
@@ -30,18 +30,18 @@ resource "aws_subnet" "public" {
   vpc_id = data.aws_vpc.vpc.id
 
   assign_ipv6_address_on_creation = true
-  map_public_ip_on_launch = true
+  map_public_ip_on_launch         = true
 
   availability_zone = each.key
-  cidr_block = local.public_subnet_cidr_blocks[each.key]
-  ipv6_cidr_block = local.public_subnet_ipv6_cidr_blocks[each.key]
+  cidr_block        = local.public_subnet_cidr_blocks[each.key]
+  ipv6_cidr_block   = local.public_subnet_ipv6_cidr_blocks[each.key]
 
   tags = merge(
     var.default_tags,
     {
       Name = "${var.default_tags["Environment"]}.${each.key}.subnet.public.ghost"
     }
-  )  
+  )
 }
 
 resource "aws_route_table" "ghost" {
@@ -63,6 +63,6 @@ resource "aws_route_table" "ghost" {
 resource "aws_route_table_association" "ghost" {
   for_each = aws_subnet.public
 
-  subnet_id = each.value.id
+  subnet_id      = each.value.id
   route_table_id = aws_route_table.ghost.id
 }

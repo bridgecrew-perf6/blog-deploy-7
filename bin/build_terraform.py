@@ -9,8 +9,8 @@ from logging import Logger
 from pathlib import Path
 from typing import List
 
-from bin.builder import run_build_command, FinishedProcess
-from bin.common import get_logger, get_loop
+from builder import run_build_command, FinishedProcess
+from common import get_logger, get_loop
 
 
 @dataclass
@@ -33,6 +33,7 @@ class Args:
 
     no_init: bool
     debug: bool
+    dry_run: bool
 
 
 def _parse_args() -> Args:
@@ -55,10 +56,9 @@ def _parse_args() -> Args:
 
     parser.add_argument("--no-init", default=False, action="store_true")
     parser.add_argument("--debug", default=False, action="store_true")
+    parser.add_argument("--dry-run", default=False, action="store_true")
 
     opts = parser.parse_args()
-    print(opts.availability_zones)
-    import pdb;pdb.set_trace()
     return Args(
         environment=f"{opts.environment}",
         subcmd=f"{opts.subcmd}",
@@ -74,6 +74,7 @@ def _parse_args() -> Args:
         ec2_ssh_key_pair=f"{opts.ec2_ssh_key_pair}",
         no_init=bool(opts.no_init),
         debug=bool(opts.debug),
+        dry_run=bool(opts.dry_run),
     )
 
 
@@ -81,13 +82,20 @@ async def run_build(
     loop: AbstractEventLoop, log: Logger, args: Args
 ) -> FinishedProcess:
     cwd = args.terraform_dir
-    availability_zones = '["{}"]'.format('", "'.join(args.availability_zones.split(",")))
+    availability_zones = '["{}"]'.format(
+        '", "'.join(args.availability_zones.split(","))
+    )
+
+    additional_flags = ["-no-color"]
+    if args.dry_run:
+        args.subcmd = "plan"
+    else:
+        additional_flags.append("-auto-approve")
 
     build_args = [
         "terraform",
         args.subcmd,
-        "-auto-approve",
-        "-no-color",
+        *additional_flags,
         f"-var=aws_profile={args.aws_profile}",
         f"-var=aws_region={args.aws_region}",
         f"-var=build_version={args.build_version}",
@@ -104,6 +112,7 @@ async def run_build(
         build_args.insert(2, " ".join(args.terraform_flags))
 
     if not args.no_init:
+        log.info("starting `terraform init` build step")
         _ = await run_build_command(
             "terraform",
             "init",
@@ -113,12 +122,26 @@ async def run_build(
             loop=loop,
         )
 
-    return await run_build_command(
+    log.info("starting `terraform %s` build step", args.subcmd)
+    proc = await run_build_command(
         *build_args,
         cwd=cwd,
         log=log,
         loop=loop,
     )
+    log.info("finished `terraform %s` build step", args.subcmd)
+
+    tf_output = await run_build_command(
+        "terraform",
+        "output",
+        "-json",
+        cwd=cwd,
+        log=log,
+        loop=loop,
+    )
+    log.info("terraform output:\n%s", tf_output.stdout)
+
+    return tf_output
 
 
 async def main(loop: AbstractEventLoop, log: Logger, args: Args) -> int:

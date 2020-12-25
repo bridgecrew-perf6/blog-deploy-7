@@ -8,12 +8,12 @@ global:
     environment: {{ environment_ }}
 
 scrape_configs:
-- job_name: node
-  static_configs:
-  - targets:
-    - localhost:{{ node_exporter_port }}
-
-- job_name: consul
-  consul_sd_configs:
-  - server: localhost:{{ consul_agent_port }}
-    datacenter: {{ aws_region }}
+  - job_name: prometheus
+    static_configs:
+      - targets: ["localhost:{{ prometheus_port }}"]
+  - job_name: node
+    static_configs:
+      - targets: ["localhost:{{ node_exporter_port }}"]
+  - job_name: consul
+    static_configs:
+      - targets: ["localhost:{{ consul_exporter_port }}"]

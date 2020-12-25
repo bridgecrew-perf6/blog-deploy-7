@@ -3,7 +3,8 @@
 set -Eeuo pipefail
 
 prometheus_dir={{ prometheus_dir }}
+prometheus_data_dir={{ prometheus_data_dir }}
 
-${prometheus_dir}/prometheus \
-    --config.file=${prometheus_dir}/prometheus.yml \
-    --storage.tsdb.path=${prometheus_dir}/data
+exec ${prometheus_dir}/prometheus \
+    --config.file="${prometheus_dir}/prometheus.yml" \
+    --storage.tsdb.path="${prometheus_data_dir}"

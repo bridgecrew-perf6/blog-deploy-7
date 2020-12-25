@@ -9,11 +9,23 @@
 
 - name: copy ghost init scripts
   template:
-    src: "init-scripts.d/{{ item }}.sh.j2"
-    dest: "{{ base_dir }}/{{ item }}.sh"
+    src: init-scripts.d/prerun-logrotate.sh.j2
+    dest: "{{ base_dir }}/prerun-logrotate.sh"
     group: "{{ service_users_group }}"
     mode: 0775
-  loop:
-    - prerun-logrotate
-    - consul-service
-    - prometheus-agent-service
+
+- name: copy consul-agent init script
+  template:
+    src: init-scripts.d/consul-agent-service.sh.j2
+    dest: "{{ base_dir }}/consul-agent-service.sh"
+    group: "{{ service_users_group }}"
+    mode: 0755
+  notify: restart consul-agent
+
+- name: copy prometheus-agent init script
+  template:
+    src: init-scripts.d/prometheus-agent-service.sh.j2
+    dest: "{{ base_dir }}/prometheus-agent-service.sh"
+    group: "{{ service_users_group }}"
+    mode: 0755
+  notify: restart prometheus-agent

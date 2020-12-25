@@ -13,3 +13,4 @@
 - include: install-env.yml
 - include: setup-consul.yml
 - include: setup-prometheus.yml
+- include: update-pkgs.yml

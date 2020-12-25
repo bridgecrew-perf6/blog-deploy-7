@@ -1,0 +1,25 @@
+---
+
+- name: reload systemd daemon
+  systemd:
+    daemon_reload: true
+
+- name: restart consul-agent
+  service:
+    name: consul-agent
+    state: restarted
+
+- name: restart prometheus-agent
+  service:
+    name: prometheus-agent
+    state: restarted
+
+- name: restart consul_exporter
+  service:
+    name: consul_exporter
+    state: restarted
+
+- name: restart node_exporter
+  service:
+    name: node_exporter
+    state: restarted

@@ -6,11 +6,9 @@ User=consul
 Group={{ service_users_group }}
 Type=simple
 ExecStartPre={{ base_dir }}/prerun-logrotate.sh consul
-ExecStart={{ base_dir }}/consul-service.sh
+ExecStart={{ base_dir }}/consul-agent-service.sh
 StandardOutput=file:{{ log_dir }}/consul.log
 StandardError=inherit
-Restart=on-failure
-RestartSec=10s
 
 [Install]
 WantedBy=multi-user.target

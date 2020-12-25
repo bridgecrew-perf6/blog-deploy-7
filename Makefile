@@ -3,7 +3,7 @@ pwd := $(shell pwd)
 AWS_REGION ?= us-west-2
 BUILD_ENVIRONMENT ?= development
 BUILD_VERSION ?= 0.0.0
-COMMIT_HASH ?= 
+COMMIT_HASH ?= $(shell git rev-parse HEAD)
 PACKER_IMAGE_ID ?=
 
 ANSIBLE_DIR ?= ${pwd}/ansible
@@ -12,6 +12,11 @@ TERRAFORM_DIR ?= ${pwd}/terraform
 
 PACKER_FLAGS ?= 
 TERRAFORM_FLAGS ?= 
+
+ansible:
+	ansible-playbook \
+		"${ANSIBLE_DIR}/main.yml" \
+		-i "${ANSIBLE_DIR}/inventory.yml"
 
 terraform:
 	./bin/build_terraform.py \
@@ -52,16 +57,26 @@ packer:
 
 clean: clean-terraform
 
+format:
+	terraform fmt \
+		-recursive \
+		"${TERRAFORM_DIR}"
+	black $(shell find . \
+		-not \( -path ./.venv -prune \) \
+		-name "*.py" \
+		-print)
+
 deploy:
-	./deploy.py \
+	./bin/deploy.py \
 		"${BUILD_ENVIRONMENT}" \
 		--aws-profile=pangu \
 		--packer-dir="${PACKER_DIR}" \
 		--packer-flags="${PACKER_FLAGS}" \
 		--terraform-dir="${TERRAFORM_DIR}" \
 		--terraform-flags="${TERRAFORM_FLAGS}" \
-		--ec2-ssh-key-pair=pangu
+		--ec2-ssh-key-pair=pangu \
+		--debug
 
 .EXPORT_ALL_VARIABLES:
 
-.PHONY: .EXPORT_ALL_VARIABLES terraform packer deploy
+.PHONY: .EXPORT_ALL_VARIABLES ansible clean-terraform deploy packer terraform

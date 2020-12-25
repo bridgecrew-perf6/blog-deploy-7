@@ -1,0 +1,13 @@
+#! /usr/bin/env bash
+
+set -Eeuo pipefail
+
+consul_data_dir={{ consul_data_dir }}
+consul_dir={{ consul_dir }}
+
+mkdir -p "${consul_data_dir}"
+
+exec consul agent \
+    -bind=0.0.0.0 \
+    -bootstrap-expect {{ consul_nodes_count }} \
+    -config-file="${consul_dir}/config.json"

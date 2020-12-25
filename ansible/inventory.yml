@@ -1,6 +1,4 @@
 ---
 ghost:
   hosts:
-    localhost:
-      ansible_host: localhost
-      ansible_connection: local
+    ec2-54-201-97-152.us-west-2.compute.amazonaws.com:
