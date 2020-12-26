@@ -1,3 +1,6 @@
-output "ec2_eip_address" {
-  value = module.ec2.eip_address
+output "ec2_instance" {
+  value = {
+    dns = module.ec2.eip_dns
+    ip  = module.ec2.eip_address
+  }
 }

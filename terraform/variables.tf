@@ -31,7 +31,7 @@ variable "availability_zone_names" {
   description = "the list of AZ names to create VPC subnets in"
 }
 
-# EC2 control variables
+# EC2 variables
 variable "ec2_image_id" {
   type        = string
   description = "the AMI to use when launching an EC2 instance"
@@ -46,4 +46,10 @@ variable "ec2_instance_type" {
 variable "ec2_ssh_key_pair" {
   type        = string
   description = "the name of the SSH key pair for EC2 remote access"
+}
+
+# Route53 variables
+variable "domain_name" {
+  type        = string
+  description = "the domain name for the deployment"
 }

@@ -20,12 +20,6 @@ variable "base_image_id" {
 }
 
 # Ghost environment configuration variables
-variable "base_dir" {
-    type = string
-    description = "the directory to store ghost-specific files, e.g. scripts, configs"
-    default = "/var/opt/ghost"
-}
-
 variable "build_version" {
     type = string
     description = "the version of the image being built"

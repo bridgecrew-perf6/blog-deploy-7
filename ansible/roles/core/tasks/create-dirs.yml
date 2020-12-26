@@ -13,13 +13,6 @@
     group: "{{ service_users_group }}"
     mode: 0775
 
-- name: create ghost run dir
-  file:
-    path: "{{ run_dir }}"
-    state: directory
-    group: "{{ service_users_group }}"
-    mode: 0775
-
 - name: create consul dir
   file:
     path: "{{ consul_dir }}"

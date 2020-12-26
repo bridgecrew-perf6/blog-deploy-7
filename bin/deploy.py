@@ -35,6 +35,8 @@ class Args:
     ec2_instance_type: str
     ec2_ssh_key_pair: str
 
+    domain_name: str
+
     no_init: bool
     no_packer: bool
     no_terraform: bool
@@ -103,6 +105,12 @@ def _parse_args() -> Args:
     )
 
     parser.add_argument(
+        "--domain-name",
+        required=True,
+        help="domain name for the deployed environment",
+    )
+
+    parser.add_argument(
         "--no-init",
         default=False,
         action="store_true",
@@ -149,6 +157,7 @@ def _parse_args() -> Args:
         ec2_image_id=f"{opts.ec2_image_id}",
         ec2_instance_type=f"{opts.ec2_instance_type}",
         ec2_ssh_key_pair=f"{opts.ec2_ssh_key_pair}",
+        domain_name=f"{opts.domain_name}",
         no_init=bool(opts.no_init),
         no_packer=bool(opts.no_packer),
         no_terraform=bool(opts.no_terraform),
@@ -242,6 +251,7 @@ async def main(loop: AbstractEventLoop, log: Logger, args: Args) -> int:
             ec2_image_id=image_id,
             ec2_instance_type=args.ec2_instance_type,
             ec2_ssh_key_pair=args.ec2_ssh_key_pair,
+            domain_name=args.domain_name,
             no_init=args.no_init,
             debug=args.debug,
             dry_run=args.dry_run,

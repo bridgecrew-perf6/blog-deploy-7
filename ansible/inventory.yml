@@ -1,4 +1,4 @@
 ---
 ghost:
   hosts:
-    ec2-54-201-97-152.us-west-2.compute.amazonaws.com:
+    blog.gobny.me:

@@ -36,3 +36,11 @@ module "ec2" {
 
   default_tags = local.default_tags
 }
+
+module "route53" {
+  source = "./modules/route53"
+
+  blog_eip_address = module.ec2.eip_address
+
+  domain_name = var.domain_name
+}

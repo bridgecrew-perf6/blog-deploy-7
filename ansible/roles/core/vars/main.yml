@@ -1,6 +1,6 @@
 ---
 log_dir: /var/log/ghost
-run_dir: /var/opt/ghost
+base_dir: /var/opt/ghost
 
 # user variables
 service_users_group: pangu
@@ -20,7 +20,7 @@ node_exporter_version: 1.0.1
 
 # consul variables
 consul_nodes_count: 1
-consul_dir: "{{ run_dir }}/consul"
+consul_dir: "{{ base_dir }}/consul"
 consul_data_dir: "{{ consul_dir }}/data"
 
 consul_dns_port: 8600
@@ -28,7 +28,7 @@ consul_http_port: 8500
 consul_server_port: 8300
 
 # prometheus variables
-prometheus_dir: "{{ run_dir }}/prometheus"
+prometheus_dir: "{{ base_dir }}/prometheus"
 prometheus_data_dir: "{{ prometheus_dir }}/data"
 
 prometheus_port: 9090

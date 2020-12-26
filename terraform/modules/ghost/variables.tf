@@ -41,3 +41,9 @@ variable "ec2_ssh_key_pair" {
   type        = string
   description = "the name of the SSH key pair for EC2 remote access"
 }
+
+# Route53 variables
+variable "domain_name" {
+  type        = string
+  description = "the domain name for the deployment"
+}

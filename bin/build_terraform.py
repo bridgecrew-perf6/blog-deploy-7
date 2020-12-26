@@ -31,6 +31,8 @@ class Args:
     ec2_instance_type: str
     ec2_ssh_key_pair: str
 
+    domain_name: str
+
     no_init: bool
     debug: bool
     dry_run: bool
@@ -54,6 +56,8 @@ def _parse_args() -> Args:
     parser.add_argument("--ec2-instance-type", default="t3.micro")
     parser.add_argument("--ec2-ssh-key-pair", required=True)
 
+    parser.add_argument("--domain-name", required=True)
+
     parser.add_argument("--no-init", default=False, action="store_true")
     parser.add_argument("--debug", default=False, action="store_true")
     parser.add_argument("--dry-run", default=False, action="store_true")
@@ -72,6 +76,7 @@ def _parse_args() -> Args:
         ec2_image_id=f"{opts.ec2_image_id}",
         ec2_instance_type=f"{opts.ec2_instance_type}",
         ec2_ssh_key_pair=f"{opts.ec2_ssh_key_pair}",
+        domain_name=f"{opts.domain_name}",
         no_init=bool(opts.no_init),
         debug=bool(opts.debug),
         dry_run=bool(opts.dry_run),
@@ -105,6 +110,7 @@ async def run_build(
         f"-var=ec2_image_id={args.ec2_image_id}",
         f"-var=ec2_instance_type={args.ec2_instance_type}",
         f"-var=ec2_ssh_key_pair={args.ec2_ssh_key_pair}",
+        f"-var=domain_name={args.domain_name}",
     ]
 
     if len(args.terraform_flags) > 0 and args.terraform_flags[0] != "":

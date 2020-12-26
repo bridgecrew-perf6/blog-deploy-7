@@ -13,6 +13,8 @@ TERRAFORM_DIR ?= ${pwd}/terraform
 PACKER_FLAGS ?= 
 TERRAFORM_FLAGS ?= 
 
+EXTRA_DEPLOY_FLAGS ?=
+
 ansible:
 	ansible-playbook \
 		"${ANSIBLE_DIR}/main.yml" \
@@ -22,6 +24,7 @@ terraform:
 	./bin/build_terraform.py \
 		"${BUILD_ENVIRONMENT}" \
 		"apply" \
+		${EXTRA_DEPLOY_FLAGS} \
 		--aws-profile=pangu \
 		--aws-region="${AWS_REGION}" \
 		--build-version="${BUILD_VERSION}" \
@@ -29,12 +32,14 @@ terraform:
 		--terraform-dir="${TERRAFORM_DIR}" \
 		--terraform-flags="${TERRAFORM_FLAGS}" \
 		--ec2-image-id="${PACKER_IMAGE_ID}" \
-		--ec2-ssh-key-pair=pangu
+		--ec2-ssh-key-pair=pangu \
+		--domain-name=gobny.me
 
 clean-terraform:
 	./bin/build_terraform.py \
 		"${BUILD_ENVIRONMENT}" \
 		"destroy" \
+		${EXTRA_DEPLOY_FLAGS} \
 		--aws-profile=pangu \
 		--aws-region="${AWS_REGION}" \
 		--build-version="${BUILD_VERSION}" \
@@ -42,11 +47,13 @@ clean-terraform:
 		--terraform-dir="${TERRAFORM_DIR}" \
 		--terraform-flags="${TERRAFORM_FLAGS}" \
 		--ec2-image-id="${PACKER_IMAGE_ID}" \
-		--ec2-ssh-key-pair=pangu
+		--ec2-ssh-key-pair=pangu \
+		--domain-name=gobny.me
 
 packer:
 	./bin/build_packer.py \
 		"${BUILD_ENVIRONMENT}" \
+		${EXTRA_DEPLOY_FLAGS} \
 		--ansible-playbook="${ANSIBLE_DIR}/main.yml" \
 		--aws-profile=pangu \
 		--aws-region="${AWS_REGION}" \
@@ -69,13 +76,14 @@ format:
 deploy:
 	./bin/deploy.py \
 		"${BUILD_ENVIRONMENT}" \
+		${EXTRA_DEPLOY_FLAGS} \
 		--aws-profile=pangu \
 		--packer-dir="${PACKER_DIR}" \
 		--packer-flags="${PACKER_FLAGS}" \
 		--terraform-dir="${TERRAFORM_DIR}" \
 		--terraform-flags="${TERRAFORM_FLAGS}" \
 		--ec2-ssh-key-pair=pangu \
-		--debug
+		--domain-name=gobny.me
 
 .EXPORT_ALL_VARIABLES:
 

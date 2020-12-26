@@ -25,4 +25,6 @@ module "ghost" {
   ec2_image_id      = var.ec2_image_id
   ec2_instance_type = var.ec2_instance_type
   ec2_ssh_key_pair  = var.ec2_ssh_key_pair
+
+  domain_name = var.domain_name
 }
